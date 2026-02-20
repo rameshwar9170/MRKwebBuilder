@@ -257,7 +257,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 // Icons
 const HomeIcon = () => (
@@ -367,7 +367,6 @@ const AboutUsPage = ({ data }) => {
   const { t } = useTranslation();
   const teamMembers = getSafeArray(data, 'AboutUs');
   const businessName = data?.businessInfo?.businessName || 'Our Business';
-  const aboutBusiness = data?.businessInfo?.AboutBusiness || 'A leading company committed to innovation and excellence.';
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -381,7 +380,6 @@ const AboutUsPage = ({ data }) => {
         <h1 className="main-heading highlight-text-indigo">
           {t('about.title', { businessName })}
         </h1>
-        <h2 className="section-heading text-teal-700"></h2>
         <div className="grid-3-cols sm-grid-2-cols gap-8">
           {teamMembers.length > 0 ? (
             teamMembers.map((member) => (
@@ -600,7 +598,6 @@ const ContactUsPage = ({ data }) => {
   const { mobileNumber } = useParams();
   const cleanMobile = String(mobileNumber || '').trim();
   const contactInfo = data?.contacts?.contactInfo;
-  const businessName = data?.businessInfo?.businessName || 'Our Business';
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -805,8 +802,6 @@ function App() {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState('home');
   const [db, setDb] = useState(null);
-  const [auth, setAuth] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [websiteData, setWebsiteData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -822,13 +817,13 @@ function App() {
       const database = getDatabase(app);
       const authentication = getAuth(app);
       setDb(database);
-      setAuth(authentication);
 
       const unsubscribeAuth = onAuthStateChanged(authentication, async (user) => {
         if (user) {
-          setUserId(user.uid);
+          // User logged in
         } else {
           try {
+            // eslint-disable-next-line no-unused-vars
             const userCredential = await signInAnonymously(authentication);
           } catch (e) {
             setError(t('error.message', { error: `Authentication failed: ${e.message}. Data access may be unaffected due to permissive rules.` }));
@@ -995,7 +990,7 @@ function App() {
           <p style={{ marginTop: '0.5rem', fontSize: '0.95rem' }}>
             Powered by{' '}
             <a
-              href="https://mrk-web.vercel.app/"
+              href="https://blueskybrand.in/"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: '#0b1c3d', textDecoration: 'underline', fontWeight: '800', fontSize: '1.1rem' }}
@@ -1003,7 +998,7 @@ function App() {
               BlueSky BrandWorks
             </a>
           </p>
-        </div>~
+        </div>
       </footer>
 
 
